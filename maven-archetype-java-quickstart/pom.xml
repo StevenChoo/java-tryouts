@@ -22,9 +22,6 @@
         <!-- Default values when using this archetype without giving these as property-->
         <javaCompilerVersionDefault>21</javaCompilerVersionDefault>
         <junitVersionDefault>5.12.0</junitVersionDefault>
-<!--        <groupIdDefault>dev.choo</groupIdDefault>-->
-<!--        <artifactIdDefault>project</artifactIdDefault>-->
-<!--        <packageDefault>dev.choo</packageDefault>-->
 
         <!-- Plugin versions-->
         <maven-archetype-packaging.version>3.2.0</maven-archetype-packaging.version>
@@ -32,7 +29,6 @@
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
         <maven-deploy-plugin.version>3.1.2</maven-deploy-plugin.version>
-
     </properties>
 
     <build>
