@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.choo</groupId>
+    <artifactId>maven-archetype-java-quickstart</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>maven-archetype</packaging>
+
+    <name>Maven Archetype Java Quickstart</name>
+    <description>An archetype which contains a sample Maven project.</description>
+
+    <url>https://www.stevenchoo.nl</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+
+        <!-- Default values when using this archetype without giving these as property-->
+        <javaCompilerVersionDefault>21</javaCompilerVersionDefault>
+        <junitVersionDefault>5.12.0</junitVersionDefault>
+<!--        <groupIdDefault>dev.choo</groupIdDefault>-->
+<!--        <artifactIdDefault>project</artifactIdDefault>-->
+<!--        <packageDefault>dev.choo</packageDefault>-->
+
+        <!-- Plugin versions-->
+        <maven-archetype-packaging.version>3.2.0</maven-archetype-packaging.version>
+        <maven-clean-plugin.version>3.4.0</maven-clean-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
+        <maven-deploy-plugin.version>3.1.2</maven-deploy-plugin.version>
+
+    </properties>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>${maven-archetype-packaging.version}</version>
+            </extension>
+        </extensions>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources-filtered</directory>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <filtering>true</filtering>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-archetype-plugin</artifactId>
+                    <version>${maven-archetype-packaging.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                    <configuration>
+                        <escapeString>\</escapeString>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
