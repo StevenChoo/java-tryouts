@@ -9,7 +9,11 @@ Created by `mvn archetype:generate` choosing the `maven-archetype-archetype` arc
 To use this archetype run:
 
 ```shell
-mvn archetype:generate -DarchetypeGroupId=dev.choo -DarchetypeArtifactId=maven-archetype-java-quickstart -DarchetypeVersion=1.0-SNAPSHOT
+mvn archetype:generate \
+-DarchetypeGroupId=dev.choo \
+-DarchetypeArtifactId=maven-archetype-java-quickstart \
+-DarchetypeVersion=1.0-SNAPSHOT \ 
+-DjavaCompilerVersion=21
 ```
 
 A directory automatically is created named the same as the chosen artifactId.
@@ -25,6 +29,7 @@ mvn archetype:generate \
 -DgroupId=org.test \
 -Dpackage=test.project \
 -DartifactId=example \
+-DjavaCompilerVersion=21 \
 -DinteractiveMode=false
 ```
 

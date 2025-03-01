@@ -1,110 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        #macro( compilerProperties $javaCompilerVersionLocal )
-        #set( $Double = 0.0 )
-        #if ( $Double.valueOf($javaCompilerVersionLocal) > 8 )
-<maven.compiler.release>${javaCompilerVersionLocal}</maven.compiler.release>
-        #else
-<maven.compiler.source>${javaCompilerVersionLocal}</maven.compiler.source>
-<maven.compiler.target>${javaCompilerVersionLocal}</maven.compiler.target>
-        #end
-        #end
-        #macro( junit $ver )
-        #if ( $ver.startsWith("4.") )
-<dependencies>
-<dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
-    <version>${ver}</version>
-    <scope>test</scope>
-</dependency>
-</dependencies>
-        #elseif ( $ver.startsWith("5.") )
-<dependencyManagement>
-<dependencies>
-    <dependency>
-        <groupId>org.junit</groupId>
-        <artifactId>junit-bom</artifactId>
-        <version>${ver}</version>
-        <type>pom</type>
-        <scope>import</scope>
-    </dependency>
-</dependencies>
-</dependencyManagement>
+#macro( compilerProperties $javaCompilerVersionLocal )
+    #set( $Double = 0.0 )
+    #if ( $Double.valueOf($javaCompilerVersionLocal) > 8 )
+    <maven.compiler.release>${javaCompilerVersionLocal}</maven.compiler.release>
+    #else
+    <maven.compiler.source>${javaCompilerVersionLocal}</maven.compiler.source>
+    <maven.compiler.target>${javaCompilerVersionLocal}</maven.compiler.target>
+    #end
+#end
 
-<dependencies>
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-api</artifactId>
-    <scope>test</scope>
-</dependency>
-<!-- Optionally: parameterized tests support -->
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter-params</artifactId>
-    <scope>test</scope>
-</dependency>
-</dependencies>
-        #end
-        #end
+#macro( junit $ver )
+    #if ( $ver.startsWith("4.") )
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${ver}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    #elseif ( $ver.startsWith("5.") )
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${ver}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    #end
+#end
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-<groupId>\${groupId}</groupId>
-<artifactId>\${artifactId}</artifactId>
-<version>\${version}</version>
+    <groupId>\${groupId}</groupId>
+    <artifactId>\${artifactId}</artifactId>
+    <version>\${version}</version>
 
-<name>\${artifactId}</name>
-<!-- FIXME change it to the project's website -->
-<url>http://www.example.com</url>
+    <name>\${artifactId}</name>
 
-<properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    #compilerProperties( ${javaCompilerVersion} )
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+#compilerProperties( ${javaCompilerVersion} )
 
-    <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
-    <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-    <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
-    <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
-    <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-    <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
-    <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
-</properties>
+        <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+        <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
+        <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
+    </properties>
 
 #junit( ${junitVersion} )
 
-<build>
-    <pluginManagement>
-        <plugins>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId> <!-- Removes files generated at build-time -->
-                <version>\${maven-clean-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId> <!-- Handles the copying of project resources to the output directory. -->
-                <version>\${maven-resources-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId> <!-- Used to compile the sources -->
-                <version>\${maven-compiler-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId> <!-- Plugin to run unit tests-->
-                <version>\${maven-surefire-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId> <!-- Provides the capability to build jars -->
-                <version>\${maven-jar-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId> <!-- Used to install dependencies in the project-->
-                <version>\${maven-install-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId> <!-- Used to deploy the generate artifacts of this project -->
-                <version>\${maven-deploy-plugin.version}</version>
-            </plugin>
-        </plugins>
-    </pluginManagement>
-</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId> <!-- Removes files generated at build-time -->
+                    <version>\${maven-clean-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId> <!-- Handles the copying of project resources to the output directory. -->
+                    <version>\${maven-resources-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId> <!-- Used to compile the sources -->
+                    <version>\${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId> <!-- Plugin to run unit tests-->
+                    <version>\${maven-surefire-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId> <!-- Provides the capability to build jars -->
+                    <version>\${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId> <!-- Used to install dependencies in the project-->
+                    <version>\${maven-install-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId> <!-- Used to deploy the generate artifacts of this project -->
+                    <version>\${maven-deploy-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
