@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /school-example
+spring:
+  threads:
+    virtual:
+      enabled: true
+  jpa:
+    show-sql: false
+    properties:
+      show_sql: false
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        timezone:
+          default_storage: NORMALIZE
+    hibernate:
+      ddl-auto: none
+  datasource:
+    driver-class-name: org.h2.Driver
+    password: ''
+    username: sa
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
