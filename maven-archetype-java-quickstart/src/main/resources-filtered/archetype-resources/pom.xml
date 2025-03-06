@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL - suppress annoying IDE XML validation errors due to this being a template. Since its IDE specific, can be removed -->
 #macro( compilerProperties $javaCompilerVersionLocal )
     #set( $Double = 0.0 )
     #if ( $Double.valueOf($javaCompilerVersionLocal) > 8 )
