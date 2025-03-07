@@ -15,8 +15,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * @org.springframework.modulith.NamedInterface(name = "API")
- */
-@org.springframework.modulith.ApplicationModule
-package dev.choo.example.school.api;
+package dev.choo.example.school.student.domain.model
+
+import java.time.Instant
+import java.util.UUID
+
+enum class StudentStatus {
+    REGISTERED,
+    UNREGISTERED,
+    SUSPENDED,
+    GRADUATED,
+}
+
+data class Student(
+    val id: UUID,
+    val firstName: String,
+    val lastName: String,
+    val dateOfBirth: Instant,
+    val status: StudentStatus,
+) {
+    companion object {
+        fun register(
+            firstName: String,
+            lastName: String,
+            dateOfBirth: Instant,
+        ) = Student(UUID.randomUUID(), firstName, lastName, dateOfBirth, status = StudentStatus.REGISTERED)
+    }
+}

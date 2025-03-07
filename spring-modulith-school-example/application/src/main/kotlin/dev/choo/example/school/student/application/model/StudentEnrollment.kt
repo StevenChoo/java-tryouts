@@ -15,8 +15,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * @org.springframework.modulith.NamedInterface(name = "API")
- */
-@org.springframework.modulith.ApplicationModule
-package dev.choo.example.school.api;
+package dev.choo.example.school.student.application.model
+
+import java.util.UUID
+
+sealed class RegisterResult {
+    data class Success(
+        val studentId: UUID,
+        val isEligibleForAdvancedPlacement: Boolean,
+    ) : RegisterResult()
+
+    data class Failure(
+        val reason: String,
+    ) : RegisterResult()
+}
+
+sealed class UnregisterResult {
+    data class Success(
+        val studentId: UUID,
+    ) : UnregisterResult()
+
+    data class Failure(
+        val reason: String,
+    ) : UnregisterResult()
+}

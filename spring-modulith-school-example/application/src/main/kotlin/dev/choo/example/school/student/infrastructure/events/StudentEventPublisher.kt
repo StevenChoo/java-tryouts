@@ -15,14 +15,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package dev.choo.example.school
+package dev.choo.example.school.student.infrastructure.events
 
-import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.stereotype.Component
 
-@SpringBootTest
-class SchoolApplicationTest {
-    @Test
-    fun contextLoads() {
+@Component
+class StudentEventPublisher {
+    fun publish(event: StudentEvent) {
+        when (event) {
+            is StudentRegisteredEvent -> println("Published event for student ${event.studentId} with status REGISTERED")
+            is StudentUnRegisteredEvent -> println("Published event for student ${event.studentId} with status UNREGISTERED")
+            is StudentDeletedEvent -> println("Published event for student ${event.studentId} with status DELETED")
+            is StudentUpdatedFailedEvent -> println("Published event for student ${event.studentId} with status UPDATE FAILED")
+        }
     }
 }

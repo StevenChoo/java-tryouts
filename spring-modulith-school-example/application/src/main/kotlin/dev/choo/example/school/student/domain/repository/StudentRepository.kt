@@ -15,8 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * @org.springframework.modulith.NamedInterface(name = "API")
- */
-@org.springframework.modulith.ApplicationModule
-package dev.choo.example.school.api;
+package dev.choo.example.school.student.domain.repository
+
+import dev.choo.example.school.student.domain.model.Student
+import java.util.UUID
+
+interface StudentRepository {
+    fun getAll(): List<Student>
+
+    fun findById(id: UUID): Student?
+
+    fun save(student: Student): Student
+
+    fun delete(id: UUID): Boolean
+
+    fun exists(id: UUID): Boolean
+}

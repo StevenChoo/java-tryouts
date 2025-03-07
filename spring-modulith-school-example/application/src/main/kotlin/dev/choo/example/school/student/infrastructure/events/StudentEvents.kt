@@ -15,8 +15,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * @org.springframework.modulith.NamedInterface(name = "API")
- */
-@org.springframework.modulith.ApplicationModule
-package dev.choo.example.school.api;
+package dev.choo.example.school.student.infrastructure.events
+
+import java.util.UUID
+
+sealed interface StudentEvent {
+    val studentId: UUID
+}
+
+data class StudentRegisteredEvent(
+    override val studentId: UUID,
+) : StudentEvent
+
+data class StudentUnRegisteredEvent(
+    override val studentId: UUID,
+) : StudentEvent
+
+data class StudentDeletedEvent(
+    override val studentId: UUID,
+) : StudentEvent
+
+data class StudentUpdatedFailedEvent(
+    override val studentId: UUID,
+    val action: String,
+    val reason: String,
+) : StudentEvent
