@@ -15,6 +15,7 @@
         <java.version>21</java.version>
 
         <error-prone-core.version>2.37.0</error-prone-core.version>
+        <picnic-error-prone-support>0.21.0</picnic-error-prone-support>
 
         <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
@@ -64,7 +65,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version>
+                    <version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
@@ -74,13 +75,32 @@
                             <arg>--should-stop=ifError=FLOW</arg>
                             <arg>-Xplugin:ErrorProne</arg>
                         </compilerArgs>
+                        <failOnWarning>true</failOnWarning> <!-- Fail build on warning -->
                         <annotationProcessorPaths>
                             <path>
                                 <groupId>com.google.errorprone</groupId>
                                 <artifactId>error_prone_core</artifactId>
                                 <version>${error-prone-core.version}</version>
                             </path>
+                            <!-- Error Prone Support's additional bug checkers. -->
+                            <path>
+                                <groupId>tech.picnic.error-prone-support</groupId>
+                                <artifactId>error-prone-contrib</artifactId>
+                                <version>${picnic-error-prone-support}</version>
+                            </path>
+                            <!-- Error Prone Support's Refaster rules. -->
+                            <path>
+                                <groupId>tech.picnic.error-prone-support</groupId>
+                                <artifactId>refaster-runner</artifactId>
+                                <version>${picnic-error-prone-support}</version>
+                            </path>
+
+
+                            <!-- Add lombok here if needed -->
+
                             <!-- Other annotation processors go here.
+
+
 
                             If 'annotationProcessorPaths' is set, processors will no longer be
                             discovered on the regular -classpath; see also 'Using Error Prone
