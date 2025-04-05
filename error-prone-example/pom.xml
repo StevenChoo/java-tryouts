@@ -17,6 +17,7 @@
         <error-prone-core.version>2.37.0</error-prone-core.version>
         <picnic-error-prone-support>0.21.0</picnic-error-prone-support>
 
+        <sort-pom-maven.version>4.0.0</sort-pom-maven.version>
         <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
@@ -26,18 +27,6 @@
         <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
     </properties>
 
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.12.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -51,6 +40,18 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.12.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -63,6 +64,34 @@
                     <version>${maven-resources-plugin.version}</version>
                 </plugin>
                 <plugin>
+                    <groupId>com.github.ekryd.sortpom</groupId>
+                    <artifactId>sortpom-maven-plugin</artifactId>
+                    <version>${sort-pom-maven.version}</version>
+                    <configuration>
+                        <createBackupFile>false</createBackupFile>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <expandEmptyElements>false</expandEmptyElements>
+                        <nrOfIndentSpace>4</nrOfIndentSpace>
+                        <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
+                        <sortDependencies>groupId,artifactId</sortDependencies>
+                        <sortDependencyExclusions>groupId,artifactId</sortDependencyExclusions>
+                        <sortModules>true</sortModules>
+                        <sortPlugins>groupId,artifactId</sortPlugins>
+                        <sortProperties>true</sortProperties>
+                        <verifyFail>warn</verifyFail>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>verify-pom-sorting</id>
+                            <goals>
+                                <goal>verify</goal>
+                            </goals>
+                            <phase>verify</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
@@ -71,11 +100,61 @@
                         <target>${java.version}</target>
                         <encoding>UTF-8</encoding>
                         <compilerArgs>
+                            <!-- Enable and configure Error Prone. -->
+                            <!-- Copied from: https://github.com/rickie/error-prone-demo -->
+                            <arg>
+                                -Xplugin:ErrorProne
+                                <!-- We use a separate Maven profile to
+                                raise all warnings as errors. This way one
+                                can optionally collect all warnings without
+                                failing the build on the first error
+                                encountered. -->
+                                -XepAllErrorsAsWarnings
+                                <!-- -XepAllSuggestionsAsWarnings-->
+                                <!-- We want to enable almost all Error
+                                Prone bug pattern checkers, so we enable
+                                all and then selectively deactivate some. -->
+                                -XepAllDisabledChecksAsWarnings
+                                <!-- Some generated classes violate Error
+                                Prone bug patterns. We cannot in all cases
+                                avoid that, so we simply tell Error Prone
+                                not to warn about generated code. -->
+                                -XepDisableWarningsInGeneratedCode
+                                -XepExcludedPaths:\Q${project.build.directory}${file.separator}\E.*
+                                <!-- We don't target Android. -->
+                                -Xep:AndroidJdkLibsChecker:OFF
+                                <!-- We don't target JDK 7. -->
+                                -Xep:Java7ApiChecker:OFF
+                                <!-- We don't target JDK 8. -->
+                                -Xep:Java8ApiChecker:OFF
+                                <!-- We generally discourage `var` use. -->
+                                -Xep:Varifier:OFF
+                                <!-- Disabled for demo purposes. -->
+                                -Xep:SystemOut:OFF
+                                <!-- Refaster name pattern example:
+                                -XepOpt:Refaster:NamePattern=^(?!(Immutable.*Rules)).*
+                                -->
+                                <!--
+                                START Error Prone Support configuration.
+                                -->
+                                <!-- XXX: Enable once sufficiently
+                                configurable. -->
+                                -Xep:LexicographicalAnnotationListing:OFF
+                                <!-- XXX: Disabled as it is not a clear
+                                improvement. -->
+                                -Xep:StringJoin:OFF
+                                -XepOpt:ErrorProneSupport:IgnoreClasspathCompat=true
+                                <!--
+                                END Error Prone Support configuration.
+                                -->
+                                <!-- Append additional custom arguments. -->
+                                ${error-prone.patch-args}
+                            </arg>
                             <arg>-XDcompilePolicy=simple</arg>
                             <arg>--should-stop=ifError=FLOW</arg>
-                            <arg>-Xplugin:ErrorProne</arg>
                         </compilerArgs>
-                        <failOnWarning>true</failOnWarning> <!-- Fail build on warning -->
+                        <showWarnings>false</showWarnings>
+                        <failOnWarning>false</failOnWarning> <!-- Fail build on warning -->
                         <annotationProcessorPaths>
                             <path>
                                 <groupId>com.google.errorprone</groupId>
@@ -127,4 +206,37 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>strict</id> <!-- Add profile for strict checks -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <showWarnings>true</showWarnings>
+                            <failOnWarning>true</failOnWarning> <!-- Fail build on warning -->
+                        </configuration>
+                    </plugin>
+                </plugins>
+
+            </build>
+
+        </profile>
+
+        <profile>
+            <!-- If combined with the `error-prone` profile above, this profile
+            configures Error Prone to try and automatically fix (rather than
+            merely flag) bug pattern violations in the source code. -->
+            <id>patch</id>
+            <properties>
+                <error-prone.patch-args>-XepPatchChecks:${error-prone.patch-checks} -XepPatchLocation:IN_PLACE</error-prone.patch-args>
+                <!-- One can override this value to specify which checks should be patched. -->
+                <error-prone.patch-checks/>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>
