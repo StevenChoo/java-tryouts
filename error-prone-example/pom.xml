@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.choo</groupId>
@@ -11,34 +9,21 @@
     <name>error-prone-example</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>21</java.version>
 
         <error-prone-core.version>2.37.0</error-prone-core.version>
+        <java.version>21</java.version>
+        <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
+        <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <picnic-error-prone-support>0.21.0</picnic-error-prone-support>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <sort-pom-maven.version>4.0.0</sort-pom-maven.version>
-        <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
-        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
-        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-        <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
-        <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -51,6 +36,27 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <!-- Error Prone -->
+        <dependency>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>error_prone_annotations</artifactId>
+            <version>${error-prone-core.version}</version>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -70,7 +76,8 @@
                     <sortModules>true</sortModules>
                     <sortPlugins>groupId,artifactId</sortPlugins>
                     <sortProperties>true</sortProperties>
-                    <verifyFail>stop</verifyFail> <!-- Force sorting. Stop on fail -->
+                    <verifyFail>stop</verifyFail>
+                    <!-- Force sorting. Stop on fail -->
                 </configuration>
                 <executions>
                     <execution>
@@ -81,6 +88,12 @@
                         <phase>initialize</phase>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <!-- Removes files generated at build-time -->
+                <version>${maven-clean-plugin.version}</version>
             </plugin>
 
             <plugin>
@@ -146,7 +159,8 @@
                         <arg>--should-stop=ifError=FLOW</arg>
                     </compilerArgs>
                     <showWarnings>false</showWarnings>
-                    <failOnWarning>false</failOnWarning> <!-- Fail build on warning -->
+                    <failOnWarning>false</failOnWarning>
+                    <!-- Fail build on warning -->
                     <annotationProcessorPaths>
                         <path>
                             <groupId>com.google.errorprone</groupId>
@@ -166,7 +180,6 @@
                             <version>${picnic-error-prone-support}</version>
                         </path>
 
-
                         <!-- Add lombok here if needed -->
 
                         <!-- Other annotation processors go here.
@@ -181,40 +194,41 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId> <!-- Removes files generated at build-time -->
-                <version>${maven-clean-plugin.version}</version>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <!-- Used to deploy the generate artifacts of this project -->
+                <version>${maven-deploy-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId> <!-- Handles the copying of project resources to the output directory. -->
-                <version>${maven-resources-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId> <!-- Plugin to run unit tests-->
-                <version>${maven-surefire-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId> <!-- Provides the capability to build jars -->
-                <version>${maven-jar-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId> <!-- Used to install dependencies in the project-->
+                <artifactId>maven-install-plugin</artifactId>
+                <!-- Used to install dependencies in the project-->
                 <version>${maven-install-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId> <!-- Used to deploy the generate artifacts of this project -->
-                <version>${maven-deploy-plugin.version}</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <!-- Provides the capability to build jars -->
+                <version>${maven-jar-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <!-- Handles the copying of project resources to the output directory. -->
+                <version>${maven-resources-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <!-- Plugin to run unit tests-->
+                <version>${maven-surefire-plugin.version}</version>
             </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>strict</id> <!-- Add profile for strict checks -->
+            <id>strict</id>
+            <!-- Add profile for strict checks -->
             <build>
                 <plugins>
                     <plugin>
@@ -222,7 +236,8 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <showWarnings>true</showWarnings>
-                            <failOnWarning>true</failOnWarning> <!-- Fail build on warning -->
+                            <failOnWarning>true</failOnWarning>
+                            <!-- Fail build on warning -->
                         </configuration>
                     </plugin>
                 </plugins>
